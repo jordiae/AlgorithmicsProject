@@ -50,7 +50,7 @@ void augment(vector< pair<int, int> > &P, vector< vector< int > > &f, vector< ve
     }
     for (int i = 1; i < P.size(); i++){
         if (forw[P[i-1].first][P[i].first]){
-            f[P[i-1].first][P[i].first]+=b;
+            f[P[i-1].first][P[i].second]+=b;
             E[P[i-1].first][P[i].second].second -= b;
             //cout << "substracting " << b << " from E " <<P[i-1].first << " Pos " << P[i].second<<endl;
             //cout << E[P[i-1].first][P[i].second].second << endl;
@@ -62,20 +62,38 @@ void augment(vector< pair<int, int> > &P, vector< vector< int > > &f, vector< ve
             E[P[i].first][k].second+=b;
             //printE(E);
         }else{
-            f[P[i].first][P[i-1].first]-=b;
+            
             E[P[i-1].first][P[i].second].second+=b;
             //cout << "adding " << b << " from E " <<P[i-1].first << " Pos " << P[i].second<<endl;
             int k = 0;
             
             while (E[P[i].first][k].first != P[i-1].first) k++;
-            
+            f[P[i].first][k]-=b;
             E[P[i].first][k].second-=b;
         }
     }
 }
 
 vector< vector< int > > FordFulkerson(vector< vector< pair<int, int> > > E, int s, int t){
-    vector< vector< int > > f (E.size(), vector<int>(E.size(),0));
+    vector< vector< int > > f (E.size(), vector<int>(0));
+    for (int i = 0; i < E.size(); i++){
+        f[i].resize(E[i].size(), 0);
+    }
+    /*for (int i =0; i < E.size();i++){
+        cout << i << ": ";
+        for (int j = 0; j < E[i].size(); j++){
+            cout << E[i][j].second;
+        }
+        cout << endl;
+    }
+    cout << "flux:" << endl;
+    for (int i =0; i < f.size();i++){
+        cout << i << ": ";
+        for (int j = 0; j < f[i].size(); j++){
+            cout << f[i][j];
+        }
+        cout << endl;
+    }*/
     vector<bool> visited(E.size(),false);
     vector< vector< bool > > forw (E.size(), vector<bool>(E.size(),true));
     vector< pair<int, int> > P(0); //first in pair is node ID, second is position in vector
@@ -100,7 +118,11 @@ vector< vector< int > > FordFulkerson(vector< vector< pair<int, int> > > E, int 
     return f;
 }
 
-int main(){
+vector< vector< int > > maxflow(const vector< vector< pair<int, int> > > &E, int s, int t){
+    return FordFulkerson(E, s, t);
+}
+
+/*int main(){
     int N,M;
     cin >> N >> M;
     vector< vector< pair<int, int> > > E (N, vector< pair<int, int> >(0)); //adjacency list
@@ -113,10 +135,10 @@ int main(){
         E[a].push_back(make_pair(b,c));
     }
     cout << "Executing FordFulkerson" << endl;
-    vector< vector< int > > f = FordFulkerson(E, 0, N-1);
+    vector< vector< int > > f = maxflow(E, 0, N-1);
     int maxflow = 0;
-    for (int i = 0; i < E[0].size(); i++){
-        maxflow += f[0][ E[0][i].first ];
+    for (int i = 0; i < f[0].size(); i++){
+        maxflow += f[0][ i ];
     }
     
     cout << maxflow << endl;
@@ -124,10 +146,10 @@ int main(){
     for (int i = 0; i < E.size(); i++){
         cout << i << ":" << endl;
         for (int j = 0; j < E[i].size(); j++){
-            cout << "    " << j << ": " << E[i][j].first << "/" << f[i][ E[i][j].first ] << endl;
+            cout << "    " << j << ": " << E[i][j].first << "/" << f[i][ j ] << endl;
         }
     }
     
-}
+}*/
 
 
