@@ -44,9 +44,9 @@ int main () {
     int m = flights.size();
     cout << "Input read with " << n << " cities and " << m << " flights" << endl;
     vector <vector<int> > flightArrivals(n);
-    vector <vector<int> > flightDepartures(n);
+    //vector <vector<int> > flightDepartures(n);
     for (int i = 0; i<m; i++) {
-        flightDepartures[flights[i].origin].push_back(i);
+        //flightDepartures[flights[i].origin].push_back(i);
         flightArrivals[flights[i].destiny].push_back(i);
     }
     //grafbuilding
@@ -65,10 +65,10 @@ int main () {
                 FluxGraph[flightArrivals[flights[i].origin][j] * 2 + 5].push_back(make_pair(i*2+4, m));
         }
         // link flight i to future flights
-        for(int j = 0; j < flightDepartures[flights[i].destiny].size(); j++) {
+        /*for(int j = 0; j < flightDepartures[flights[i].destiny].size(); j++) {
             if(flights[flightDepartures[flights[i].destiny][j]].tdeparture - flights[i].tarrival >= timeMargin)
                 FluxGraph[i*2+5].push_back(make_pair(flightDepartures[flights[i].destiny][j] * 2 + 4, m));
-        }
+        }*/
     }
     printOutcome(FluxGraph);
     int nextK = m;
