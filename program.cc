@@ -57,6 +57,8 @@ int main () {
     for(int i = 0; i<m; i++) {
         FluxGraph[sp].push_back(make_pair(i*2+4,m)); //sp to departure
         FluxGraph[i*2+5].push_back(make_pair(tp,m)); //arrival to tp
+        FluxGraph[i*2+4].push_back(make_pair(T,1));
+        FluxGraph[S].push_back(make_pair(i*2+5,1));
         if(VERSION == 2) FluxGraph[i*2+4].push_back(make_pair(i*2+5,m)); // departure to arrival
 
         // link previous flights to flight i
