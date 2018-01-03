@@ -92,35 +92,35 @@ int main () {
                 FluxGraph[flightArrivals[flights[i].origin][j] * 2 + 5].push_back(make_pair(i*2+4, m));
         }
     }
-    printOutcome(FluxGraph);
+    //printOutcome(FluxGraph);
     int nextK = m;
     bool possible = true;
     vector<vector<int> > sol;
     while (possible) {
-        cout << "Trying" << endl;
+        //cout << "Trying" << endl;
         vector<vector<int> > newSol = maxflow(FluxGraph, S, T);
         for(int i=0; i<newSol[S].size(); i++) {
             if(newSol[S][i] != FluxGraph[S][i].second) possible = false;
-            cout << newSol[S][i] << ' ';
+            //cout << newSol[S][i] << ' ';
         }
-        cout << endl;
+        //cout << endl;
         if(possible) {
-                cout << "Could with " << nextK << ", unused " << newSol[sp][0] << " so updating to ";
+                //cout << "Could with " << nextK << ", unused " << newSol[sp][0] << " so updating to ";
                 sol = newSol;
                 nextK = nextK-newSol[sp][0]-1; // lower bound to last sols - unused pilots -1
-                cout << nextK << endl;
+                //cout << nextK << endl;
                 FluxGraph[S][0].second = nextK;
                 FluxGraph[tp][0].second = nextK;
-                printOutcome(FluxGraph);
+                //printOutcome(FluxGraph);
         }
     }
-    cout << "ACTUAL SOLUTION COUT STARTS HERE----------" << endl;
+    //cout << "ACTUAL SOLUTION COUT STARTS HERE----------" << endl;
     cout << sol[S][0]-sol[sp][0] << endl;
     sol[sp][0]=0; // eliminate the 'useless' flux
     for(int i=0; i<sol[sp].size(); i++) {
         if(sol[sp][i] != 0) {
             sol[sp][i] -= 1;
-            printPilot (FluxGraph, sol, FluxGraph[sp][i].first);
+            //printPilot (FluxGraph, sol, FluxGraph[sp][i].first);
             i--;
         }
     }

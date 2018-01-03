@@ -1,0 +1,20 @@
+informe en pdf
+
+ 1- breve descripción implementado
+
+ 2- Coste temporal (minimo EK v1) en función de M y N
+
+ 3- Diferencia v1 con v2
+
+ 4- Tabla de resultados experimentales.
+ 	???? especificamente, para cada 10 inputs y versión (6) tiempo de compu medio
+
+ 5- Referencias bibliograficas
+
+
+
+ **
+ 	also folder with code and makefile & compilation instructions
+ 	Resultado1.txt
+ 	Resultado2.txt
+ 	
