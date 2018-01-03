@@ -2,7 +2,6 @@
 #include <vector>
 #include <limits>
 #include <queue>
-#include <list>
 
 
 #define INFINITE std::numeric_limits<int>::max()
