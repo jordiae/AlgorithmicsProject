@@ -21,8 +21,9 @@ using namespace std;
 
 
 bool bfs(vector<vector<pair<int,int> > > &g,vector<int> &levels, int s, int t, vector<vector<int> > &flows) {
-    for (int i = 0; i < g.size(); i++)
+    for (int i = 0; i < g.size(); i++) {
         levels[i] = -1;
+    }
 	levels[s] = 0;
 	queue<int> q;
 	q.push(s);
@@ -80,11 +81,11 @@ int dinic(vector<vector<pair<int,int> > > &graph, int s, int t, vector<vector<in
 	vector<int> levels(graph.size());
 
 	int max_flow = 0;
-	while (bfs(graph,levels,s,t,flows)) {
+	while (bfs(graph,levels,s,t,flows)) { // bfs -> label graph (labels)
 		int flow = -1;
 		vector<int> visited (graph.size()+1,0);
 		while (flow != 0) {
-			flow = dfs(s,t,INFINITE,visited,levels, graph, flows,reverse);
+			flow = dfs(s,t,INFINITE,visited,levels, graph, flows,reverse); // dfs -> blocking flow
 			max_flow += flow;
 		}
 	}
