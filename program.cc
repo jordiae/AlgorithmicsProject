@@ -105,7 +105,7 @@ int main () {
         }
         //cout << endl;
         if(possible) { //should do a dichosearch!!!
-                cout << "Could with " << nextK << " will try subtracting " << newSol[sp][0] << endl;
+                //cout << "Could with " << nextK << " will try subtracting " << newSol[sp][0] << endl;
                 sol = newSol;
                 nextK = nextK-newSol[sp][0]-1; // lower bound to last sols - unused pilots -1
                 //cout << nextK << endl;

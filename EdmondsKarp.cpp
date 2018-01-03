@@ -89,7 +89,7 @@ void augment(vector< pair<int, int> > &P, vector< vector< int > > &f, vector< ve
             E[P[i].first][k].second+=b;
             //printE(E);
         }else{
-            E[P[i-1].first][P[i].second].second+=b;
+            E[P[i-1].first][P[i].second].second-=b;
             //cout << "adding " << b << " from E " <<P[i-1].first << " Pos " << P[i].second<<endl;
             int k = 0;
 
@@ -155,7 +155,7 @@ int main(){
             cout << "    " << j << ": " << E[i][j].first << "/" << f[i][ j ] << endl;
         }
     }
-    
+
 }*/
 
 
