@@ -8,8 +8,8 @@
 //version is changed in compilation for version 1 ~ 2 of the problem
 // the rest are mere aliases to make code more readable
 
-//#include "FordFulkerson.cpp"
-#include "EdmondsKarp.cpp"
+#include "FordFulkerson.cpp"
+//#include "EdmondsKarp.cpp"
 //#include "dinic.cc"
 using namespace std;
 
@@ -34,6 +34,28 @@ void printOutcome(const vector<vector < pair <int,int> > >& G) {
         }
         cout << endl;
     }
+}
+
+void printPilot(const vector<vector < pair <int,int> > >& G, vector<vector <int> > & sol, int currentVertex) {
+    while(currentVertex != tp) {
+        int i=0; bool jump = false;
+        while(i < sol[currentVertex].size() and not jump) {
+            if(sol[currentVertex][i] > 0) {
+                sol[currentVertex][i] --;
+                if (G[currentVertex][i].first == T) {// he's the pilot
+                    cout << currentVertex/2-1 << ' '; // function to recover flightnumber from vertex
+                    currentVertex = currentVertex+1; //jump from current (departure) to end (arrival)
+                    jump = true;
+                } else {
+                    currentVertex = G[currentVertex][i].first;
+                    jump = true;
+                    //normal graph transition
+                }
+            }
+            i++;
+        }
+    }
+    cout << endl;
 }
 
 int main () {
@@ -92,6 +114,14 @@ int main () {
                 printOutcome(FluxGraph);
         }
     }
-    cout << nextK << endl;
-
+    cout << "ACTUAL SOLUTION COUT STARTS HERE----------" << endl;
+    cout << sol[S][0]-sol[sp][0] << endl;
+    sol[sp][0]=0; // eliminate the 'useless' flux
+    for(int i=0; i<sol[sp].size(); i++) {
+        if(sol[sp][i] != 0) {
+            sol[sp][i] -= 1;
+            printPilot (FluxGraph, sol, FluxGraph[sp][i].first);
+            i--;
+        }
+    }
 }
