@@ -1,20 +1,24 @@
-informe en pdf
+1- Breve descripción implementado
+	Hemos considerado el enunciado como un problema de asignación en el cual tendremos flujos representando a pilotos. Para trazar la red, basándonos en el material recomendado de [Kleinberg and Tardos, 2009], tendremos una red de flujos con demandas y lower bounds. En concreto, tendremos un 'source' S que proporciona un número k de pilotos y un 'sink' T que los absorve, conectados por una arista de peso k. Además, para cada vuelo, tendremos dos vertices (salida y llegada), conectados respectivamente a S y a T, a los cuales hemos asignado capacidad infinita (en realidad es sencillamente el numero de vuelos pues k <= numero de vuelos, y para simplificar podría ser sencillamente 1 pero eso solo se aplica en la primera versión del problema). Por último, conectaremos estos dos vertices por una arista con lower bound de 1 y capacidad máxima de 1 (en versión 1).
+	De esta manera, si el grafo se puede satisfacer (is feasible), entonces significa que: usamos k pilotos y todas las aristas con lowerbound (los vuelos en sí) están cubiertas. Esto es equivalente a decir que se pueden cubrir todos los vuelos con K pilotos. Ahora, sencillamente tendremos que probar con una K más baja.
+	En concreto, nosotros bajamos la k según el numero de pilotos no usados (por la arista de S a T), y usamos una búsqueda dicotómica para determinar la K mínima.
+	Como último punto, a la hora de implementar dicho grafo, lo transformamos en un grafo de capacidades normales, con dos vertices extra para suplir las ofertas de S y las que se forman en eliminar los lowerbounds y tragarse las demandas de T y las formadas en eliminar los lowerbounds.
+	Por último, hemos implementado tres algoritmos: Ford-Fulkerson, Edmonds-Karp y Dinic, para obtener las redes de flujos. 
+2- Coste temporal (minimo EK v1)
+	N: numero de ciudades; M: numero de vuelos;
+	(Victor) La transformación es 'aprox' O (m*m/n). Es aprox porque m/n es la carga esperada por casilla del vector Arrivals. (Puedo modificarlo a O(m log m) si me da tiempo). Luego, tened en cuenta de que se llamará en el peor caso log m veces la función maxflow! 
+	EK 1:
+		transformación O()
+3- Diferencia v1 con v2
+	Sencillamente subiremos la capacidad de la arista que conecta la salida y la llegada de un mismo vuelo, permitiendo a pilotos 'pasar' por esa arista sin ser piloto.
+4- Tabla de resultados experimentales.
+ 	???? especificamente, para cada 10 inputs y versión (6) tiempo de compu medio.
 
- 1- breve descripción implementado
+5- Referencias bibliograficas
+	[Kleinberg and Tardos, 2005] Kleinberg, J. and Tardos, E. (2009), Algorithm Design. [online] Available at: http://www.icsd.aegean.gr/kaporisa/index_files/Algorithm_Design.pdf [Accessed 27/12/17].
+	//add yours Jordi!
 
- 2- Coste temporal (minimo EK v1) en función de M y N
-
- 3- Diferencia v1 con v2
-
- 4- Tabla de resultados experimentales.
- 	???? especificamente, para cada 10 inputs y versión (6) tiempo de compu medio
-
- 5- Referencias bibliograficas
-
-
-
- **
+**
  	also folder with code and makefile & compilation instructions
  	Resultado1.txt
  	Resultado2.txt
- 	

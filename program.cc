@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#define VERSION 1
+#define VERSION 2
 #define S 0
 #define T 1
 #define sp 2
@@ -104,8 +104,8 @@ int main () {
             //cout << newSol[S][i] << ' ';
         }
         //cout << endl;
-        if(possible) {
-                //cout << "Could with " << nextK << ", unused " << newSol[sp][0] << " so updating to ";
+        if(possible) { //should do a dichosearch!!!
+                cout << "Could with " << nextK << endl;
                 sol = newSol;
                 nextK = nextK-newSol[sp][0]-1; // lower bound to last sols - unused pilots -1
                 //cout << nextK << endl;
