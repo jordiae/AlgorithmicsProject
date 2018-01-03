@@ -8,8 +8,8 @@
 //version is changed in compilation for version 1 ~ 2 of the problem
 // the rest are mere aliases to make code more readable
 
-#include "FordFulkerson.cpp"
-//#include "EdmondsKarp.cpp"
+//#include "FordFulkerson.cpp"
+#include "EdmondsKarp.cpp"
 //#include "dinic.cc"
 using namespace std;
 
@@ -105,7 +105,7 @@ int main () {
         }
         //cout << endl;
         if(possible) { //should do a dichosearch!!!
-                cout << "Could with " << nextK << endl;
+                cout << "Could with " << nextK << " will try subtracting " << newSol[sp][0] << endl;
                 sol = newSol;
                 nextK = nextK-newSol[sp][0]-1; // lower bound to last sols - unused pilots -1
                 //cout << nextK << endl;
