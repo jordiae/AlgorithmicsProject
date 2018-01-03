@@ -7,6 +7,10 @@
 #define tp 3
 //version is changed in compilation for version 1 ~ 2 of the problem
 // the rest are mere aliases to make code more readable
+
+//#include "FordFulkerson.cpp"
+#include "EdmondsKarp.cpp"
+//#include "dinic.cc"
 using namespace std;
 
 const int timeMargin = 15;
@@ -42,11 +46,10 @@ int main () {
         n = max(n, newFlight.origin+1, newFlight.destiny+1);
     }
     int m = flights.size();
-    cout << "Input read with " << n << " cities and " << m << " flights" << endl;
+    //should sort it to make dichosearch later on.
+    //cout << "Input read with " << n << " cities and " << m << " flights" << endl;
     vector <vector<int> > flightArrivals(n);
-    //vector <vector<int> > flightDepartures(n);
     for (int i = 0; i<m; i++) {
-        //flightDepartures[flights[i].origin].push_back(i);
         flightArrivals[flights[i].destiny].push_back(i);
     }
     //grafbuilding
@@ -55,8 +58,8 @@ int main () {
     FluxGraph[tp].push_back(make_pair(T, m));
     FluxGraph[sp].push_back(make_pair(tp, m)); //basic graph with k = m
     for(int i = 0; i<m; i++) {
-        FluxGraph[sp].push_back(make_pair(i*2+4,m)); //sp to departure
-        FluxGraph[i*2+5].push_back(make_pair(tp,m)); //arrival to tp
+        FluxGraph[sp].push_back(make_pair(i*2+4, 2*m)); //sp to departure
+        FluxGraph[i*2+5].push_back(make_pair(tp, 2*m)); //arrival to tp
         FluxGraph[i*2+4].push_back(make_pair(T,1));
         FluxGraph[S].push_back(make_pair(i*2+5,1));
         if(VERSION == 2) FluxGraph[i*2+4].push_back(make_pair(i*2+5,m)); // departure to arrival
@@ -66,16 +69,29 @@ int main () {
             if(flights[i].tdeparture - flights[flightArrivals[flights[i].origin][j]].tarrival >= timeMargin)
                 FluxGraph[flightArrivals[flights[i].origin][j] * 2 + 5].push_back(make_pair(i*2+4, m));
         }
-        // link flight i to future flights
-        /*for(int j = 0; j < flightDepartures[flights[i].destiny].size(); j++) {
-            if(flights[flightDepartures[flights[i].destiny][j]].tdeparture - flights[i].tarrival >= timeMargin)
-                FluxGraph[i*2+5].push_back(make_pair(flightDepartures[flights[i].destiny][j] * 2 + 4, m));
-        }*/
     }
     printOutcome(FluxGraph);
     int nextK = m;
     bool possible = true;
+    vector<vector<int> > sol;
     while (possible) {
-
+        cout << "Trying" << endl;
+        vector<vector<int> > newSol = maxflow(FluxGraph, S, T);
+        for(int i=0; i<newSol[S].size(); i++) {
+            if(newSol[S][i] != FluxGraph[S][i].second) possible = false;
+            cout << newSol[S][i] << ' ';
+        }
+        cout << endl;
+        if(possible) {
+                cout << "Could with " << nextK << ", unused " << newSol[sp][0] << " so updating to ";
+                sol = newSol;
+                nextK = nextK-newSol[sp][0]-1; // lower bound to last sols - unused pilots -1
+                cout << nextK << endl;
+                FluxGraph[S][0].second = nextK;
+                FluxGraph[tp][0].second = nextK;
+                printOutcome(FluxGraph);
+        }
     }
+    cout << nextK << endl;
+
 }
