@@ -155,7 +155,7 @@ int main(){
             cout << "    " << j << ": " << E[i][j].first << "/" << f[i][ j ] << endl;
         }
     }
-
+    
 }*/
 
 

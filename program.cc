@@ -1,15 +1,18 @@
 #include <iostream>
 #include <vector>
-#define VERSION 2
+#ifndef VERSION
+#define VERSION 1
+#endif
 #define S 0
 #define T 1
 #define sp 2
 #define tp 3
+#include "maxflow.h"
 //version is changed in compilation for version 1 ~ 2 of the problem
 // the rest are mere aliases to make code more readable
 
 //#include "FordFulkerson.cpp"
-#include "EdmondsKarp.cpp"
+//#include "EdmondsKarp.cpp"
 //#include "dinic.cc"
 using namespace std;
 
@@ -104,8 +107,8 @@ int main () {
             //cout << newSol[S][i] << ' ';
         }
         //cout << endl;
-        if(possible) { //should do a dichosearch!!!
-                //cout << "Could with " << nextK << " will try subtracting " << newSol[sp][0] << endl;
+        if(possible) {
+                //cout << "Could with " << nextK << ", unused " << newSol[sp][0] << " so updating to ";
                 sol = newSol;
                 nextK = nextK-newSol[sp][0]-1; // lower bound to last sols - unused pilots -1
                 //cout << nextK << endl;
