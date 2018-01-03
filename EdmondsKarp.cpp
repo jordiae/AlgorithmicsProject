@@ -90,13 +90,13 @@ void augment(vector< pair<int, int> > &P, vector< vector< int > > &f, vector< ve
             //printE(E);
         }else{
             
-            E[P[i-1].first][P[i].second].second+=b;
+            E[P[i-1].first][P[i].second].second-=b;
             //cout << "adding " << b << " from E " <<P[i-1].first << " Pos " << P[i].second<<endl;
             int k = 0;
             
             while (E[P[i].first][k].first != P[i-1].first) k++;
             f[P[i].first][k]-=b;
-            E[P[i].first][k].second-=b;
+            E[P[i].first][k].second+=b;
         }
     }
 }
@@ -128,7 +128,7 @@ vector< vector< int > > EdmondsKarp(vector< vector< pair<int, int> > > E, int s,
 vector< vector< int > > maxflow(const vector< vector< pair<int, int> > > &E, int s, int t){
     return EdmondsKarp(E, s, t);
 }
-
+/*
 int main(){
     int N,M;
     cin >> N >> M;
@@ -142,12 +142,12 @@ int main(){
         E[a].push_back(make_pair(b,c));
     }
     cout << "Executing EdmondsKarp" << endl;
-    vector< vector< int > > f = maxflow(E, 0, N-1);
+    vector< vector< int > > f = maxflow(E, 0, 1);
     int maxflow = 0;
     for (int i = 0; i < f[0].size(); i++){
         maxflow += f[0][ i ];
     }
-    
+    printE(E);
     cout << maxflow << endl;
     cout << endl;
     for (int i = 0; i < E.size(); i++){
@@ -157,6 +157,6 @@ int main(){
         }
     }
     
-}
+}*/
 
 

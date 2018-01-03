@@ -45,7 +45,7 @@ void augment(vector< pair<int, int> > &P, vector< vector< int > > &f, vector< ve
         int aux = E[P[i-1].first][P[i].second].second;
         if (aux < b){
             b = aux;
-            // << "new bottleneck is : " << b << " at " << P[i-1].first << "-" << P[i].first << endl;
+            //cout << "new bottleneck is : " << b << " at " << P[i-1].first << "-" << P[i].first << endl;
         }
     }
     for (int i = 1; i < P.size(); i++){
@@ -63,13 +63,13 @@ void augment(vector< pair<int, int> > &P, vector< vector< int > > &f, vector< ve
             //printE(E);
         }else{
             
-            E[P[i-1].first][P[i].second].second+=b;
+            E[P[i-1].first][P[i].second].second-=b;
             //cout << "adding " << b << " from E " <<P[i-1].first << " Pos " << P[i].second<<endl;
             int k = 0;
             
             while (E[P[i].first][k].first != P[i-1].first) k++;
             f[P[i].first][k]-=b;
-            E[P[i].first][k].second-=b;
+            E[P[i].first][k].second+=b;
         }
     }
 }
@@ -107,6 +107,7 @@ vector< vector< int > > FordFulkerson(vector< vector< pair<int, int> > > E, int 
         }
     }
     P = DFS(E, visited, s, t, P, -1);
+    //printpath(P);
     while (P.size() != 0){
         augment(P, f, E, forw);
         for (int i = 0; i<visited.size(); i++){
@@ -114,6 +115,7 @@ vector< vector< int > > FordFulkerson(vector< vector< pair<int, int> > > E, int 
         }
         vector< pair<int, int> > aux(0);
         P = DFS(E, visited, s, t, aux, -1);
+        //printpath(P);
     }
     return f;
 }
@@ -140,7 +142,7 @@ vector< vector< int > > maxflow(const vector< vector< pair<int, int> > > &E, int
     for (int i = 0; i < f[0].size(); i++){
         maxflow += f[0][ i ];
     }
-    
+    printE(E);
     cout << maxflow << endl;
     cout << endl;
     for (int i = 0; i < E.size(); i++){
@@ -150,6 +152,6 @@ vector< vector< int > > maxflow(const vector< vector< pair<int, int> > > &E, int
         }
     }
     
-}*/
-
+}
+*/
 
