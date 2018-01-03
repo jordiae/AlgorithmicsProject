@@ -122,10 +122,10 @@ vector<vector<int > > maxflow(const vector<vector<pair<int,int> > > &graph, int 
 
 
 
-	int max_flow = dinic(graph2,s,t,reverse,flows); 
+	int max_flow = dinic(graph2,s,t,reverse,flows);
 
 
-	for (int i = 0; i < flows_def.size()-1; i++) {
+	for (int i = 0; i < flows_def.size(); i++) {
 		if (i != t) {
 			for (int j = 0; j < flows_def[i].size(); j++) {
 				flows_def[i][j] = flows[i][flows_def[i][j]];
@@ -141,7 +141,7 @@ vector<vector<int > > maxflow(const vector<vector<pair<int,int> > > &graph, int 
 
 
 
-
+/*
 int main() {
 	int n, m;
 	while (cin >> n >>m) {
@@ -158,6 +158,8 @@ int main() {
 		int s, t;
 		s = 0;
 		t = n-1;
+
+		//t = 1;
 		
 
 
@@ -180,3 +182,5 @@ int main() {
 	}
 
 }
+
+*/
