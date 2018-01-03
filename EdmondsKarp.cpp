@@ -32,7 +32,7 @@ vector< pair<int, int> > makepath(vector< pair <int,int> > &visited, int t){
         P.push_back(make_pair(t, visited[t].second));
         return P;
     }
-    
+
 }
 
 vector< pair<int, int> > BFS(vector< vector< pair<int, int> > > &E, int s, int t){
@@ -81,19 +81,19 @@ void augment(vector< pair<int, int> > &P, vector< vector< int > > &f, vector< ve
             E[P[i-1].first][P[i].second].second -= b;
             //cout << "substracting " << b << " from E " <<P[i-1].first << " Pos " << P[i].second<<endl;
             //cout << E[P[i-1].first][P[i].second].second << endl;
-            
+
             int k = 0;
-            
+
             while (E[P[i].first][k].first != P[i-1].first) k++;
-            
+
             E[P[i].first][k].second+=b;
             //printE(E);
         }else{
-            
+
             E[P[i-1].first][P[i].second].second+=b;
             //cout << "adding " << b << " from E " <<P[i-1].first << " Pos " << P[i].second<<endl;
             int k = 0;
-            
+
             while (E[P[i].first][k].first != P[i-1].first) k++;
             f[P[i].first][k]-=b;
             E[P[i].first][k].second-=b;
@@ -108,7 +108,7 @@ vector< vector< int > > EdmondsKarp(vector< vector< pair<int, int> > > E, int s,
     }
     vector< vector< bool > > forw (E.size(), vector<bool>(E.size(),true));
     vector< pair<int, int> > P(0); //first in pair is node ID, second is position in vector
-    
+
     for(int i = 0; i< E.size(); i++){
         for (int j = 0; j < E[i].size(); j++){
             if(forw[ i ][ E[i][j].first ] == true){
@@ -128,7 +128,7 @@ vector< vector< int > > EdmondsKarp(vector< vector< pair<int, int> > > E, int s,
 vector< vector< int > > maxflow(const vector< vector< pair<int, int> > > &E, int s, int t){
     return EdmondsKarp(E, s, t);
 }
-
+/*
 int main(){
     int N,M;
     cin >> N >> M;
@@ -147,7 +147,7 @@ int main(){
     for (int i = 0; i < f[0].size(); i++){
         maxflow += f[0][ i ];
     }
-    
+
     cout << maxflow << endl;
     cout << endl;
     for (int i = 0; i < E.size(); i++){
@@ -156,7 +156,7 @@ int main(){
             cout << "    " << j << ": " << E[i][j].first << "/" << f[i][ j ] << endl;
         }
     }
-    
-}
+
+}*/
 
 
