@@ -15,7 +15,6 @@
 //#include "EdmondsKarp.cpp"
 //#include "dinic.cc"
 using namespace std;
-
 const int timeMargin = 15;
 
 struct Flight {
@@ -29,14 +28,6 @@ int max(int a, int b, int c) {
         else return c;
     } else if (b > c) return b;
     else return c;
-}
-void printOutcome(const vector<vector < pair <int,int> > >& G) {
-    for (int i = 0; i < G.size(); i++) {
-        for(int j=0; j < G[i].size(); j++) {
-            cout << i << '-' << G[i][j].second << "->" << G[i][j].first << endl;
-        }
-        cout << endl;
-    }
 }
 
 void printPilot(const vector<vector < pair <int,int> > >& G, vector<vector <int> > & sol, int currentVertex) {
@@ -71,13 +62,11 @@ int main () {
         n = max(n, newFlight.origin+1, newFlight.destiny+1);
     }
     int m = flights.size();
-    //should sort it to make dichosearch later on.
-    //cout << "Input read with " << n << " cities and " << m << " flights" << endl;
-    vector <vector<int> > flightArrivals(n);
+    vector <vector<int> > flightArrivals(n); //works akin a hashmap
     for (int i = 0; i<m; i++) {
         flightArrivals[flights[i].destiny].push_back(i);
     }
-    //grafbuilding
+    //graph building
     vector<vector < pair <int,int> > > FluxGraph (4 + 2*m);
     FluxGraph[S].push_back(make_pair(sp, m));
     FluxGraph[tp].push_back(make_pair(T, m));
@@ -96,7 +85,26 @@ int main () {
         }
     }
     //printOutcome(FluxGraph);
-    int nextK = m;
+
+    int bot = 1; int top = m;
+    while(bot != top) { //kind of like a dichotomic search, top and bot limit the position of the minimum K
+        int nextK = (top+bot)/2;
+        //cout << "trying K = " << nextK << endl;
+        bool possible = true;
+        FluxGraph[S][0].second = nextK;
+        FluxGraph[tp][0].second = nextK;
+        vector<vector<int> > newSol = maxflow(FluxGraph, S, T);
+        for(int i=0; i<newSol[S].size(); i++) {
+            if(newSol[S][i] != FluxGraph[S][i].second) possible = false;
+        }
+        if (not possible) bot = nextK+1;
+        else {
+            top = nextK-newSol[sp][0]; //lower the top to K (minus unused for optimizing)
+        }
+        //cout << bot << ':' << top << endl;
+    }
+    //BACKUP OF PREV CODE
+    /*int nextK = m;
     bool possible = true;
     vector<vector<int> > sol;
     while (possible) {
@@ -117,8 +125,12 @@ int main () {
                 //printOutcome(FluxGraph);
         }
     }
-    //cout << "ACTUAL SOLUTION COUT STARTS HERE----------" << endl;
-    cout << sol[S][0]-sol[sp][0] << endl;
+    //cout << "ACTUAL SOLUTION COUT STARTS HERE----------" << endl;*/
+    FluxGraph[S][0].second = top;
+    FluxGraph[tp][0].second = top;
+    vector<vector<int> > sol = maxflow(FluxGraph, S, T);
+    cout << sol[S][0] << endl; // -sol[sp][0] ?
+    /* FOR PRINTING PILOTS!
     sol[sp][0]=0; // eliminate the 'useless' flux
     for(int i=0; i<sol[sp].size(); i++) {
         if(sol[sp][i] != 0) {
@@ -126,5 +138,5 @@ int main () {
             //printPilot (FluxGraph, sol, FluxGraph[sp][i].first);
             i--;
         }
-    }
+    }*/
 }
