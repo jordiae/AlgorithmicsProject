@@ -5,10 +5,42 @@
 	Como último punto, a la hora de implementar dicho grafo, lo transformamos en un grafo de capacidades normales, con dos vertices extra para suplir las ofertas de S y las que se forman en eliminar los lowerbounds y tragarse las demandas de T y las formadas en eliminar los lowerbounds.
 	Por último, hemos implementado tres algoritmos: Ford-Fulkerson, Edmonds-Karp y Dinic, para obtener las redes de flujos. 
 2- Coste temporal (minimo EK v1)
-	N: numero de ciudades; M: numero de vuelos;
-	(Victor) La transformación es 'aprox' O (m*m/n). Es aprox porque m/n es la carga esperada por casilla del vector Arrivals. (Puedo modificarlo a O(m log m) si me da tiempo). Luego, tened en cuenta de que se llamará en el peor caso log m veces la función maxflow! 
+	n: numero de ciudades; m: numero de vuelos;
+	(Victor) La transformación es 'aprox' O (m*m/n). Es aprox porque m/n es la carga esperada por casilla del vector Arrivals. (Puedo modificarlo a O(m log m) si me da tiempo). Luego, tened en cuenta de que se llamará en el peor caso log m veces la función maxflow!
+	FF 1:
+		transformación O(m*m/n)
+		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = M
+		numeo de vertices: O(4+2m) = O(m) = N
+		Capacidad: 2*m = O(m) = C 
+		maxflow: O(C*M) = O(m^3)
+		maxflow se ejecuta O(log m) veces
+		coste temporal total = O(m*m/n + (log m)*(m^3)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^3)*log(m) )/(m*m) ) = infinity )
+		= O((log m)*(m^3))
+	FF 2:
+		transformación O(m*m/n)
+		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = M
+		numeo de vertices: O(4+2m) = O(m) = N
+		Capacidad: 2*m = O(m) = C 
+		maxflow: O(C*M) = O(m^3)
+		maxflow se ejecuta O(log m) veces
+		coste temporal total = O(m*m/n + (log m)*(m^3)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^3)*log(m) )/(m*m) ) = infinity )
+		= O((log m)*(m^3))
 	EK 1:
-		transformación O()
+		transformación O(m*m/n)
+		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = M
+		numeo de vertices: O(4+2m) = O(m) = N
+		maxflow: O(N*M*M) = O(m^5)
+		maxflow se ejecuta O(log m) veces
+		coste temporal total = O(m*m/n + (log m)*(m^5)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^5)*log(m) )/(m*m) ) = infinity )
+		= O((log m)*(m^5))
+	EK 2:
+		transformación O(m*m/n)
+		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = M
+		numeo de vertices: O(4+2m) = O(m) = N
+		maxflow: O(N*M*M) = O(m^5)
+		maxflow se ejecuta O(log m) veces
+		coste temporal total = O(m*m/n + (log m)*(m^5)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^5)*log(m) )/(m*m) ) = infinity )
+		= O((log m)*(m^5))
 3- Diferencia v1 con v2
 	Sencillamente subiremos la capacidad de la arista que conecta la salida y la llegada de un mismo vuelo, permitiendo a pilotos 'pasar' por esa arista sin ser piloto.
 4- Tabla de resultados experimentales.
