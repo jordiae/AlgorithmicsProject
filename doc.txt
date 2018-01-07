@@ -10,7 +10,7 @@
 	FF 1:
 		transformación O(m*m/n)
 		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = M
-		numeo de vertices: O(4+2m) = O(m) = N
+		numero de vertices: O(4+2m) = O(m) = N
 		Capacidad: 2*m = O(m) = C 
 		maxflow: O(C*M) = O(m^3)
 		maxflow se ejecuta O(log m) veces
@@ -19,7 +19,7 @@
 	FF 2:
 		transformación O(m*m/n)
 		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = M
-		numeo de vertices: O(4+2m) = O(m) = N
+		numero de vertices: O(4+2m) = O(m) = N
 		Capacidad: 2*m = O(m) = C 
 		maxflow: O(C*M) = O(m^3)
 		maxflow se ejecuta O(log m) veces
@@ -28,7 +28,7 @@
 	EK 1:
 		transformación O(m*m/n)
 		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = M
-		numeo de vertices: O(4+2m) = O(m) = N
+		numero de vertices: O(4+2m) = O(m) = N
 		maxflow: O(N*M*M) = O(m^5)
 		maxflow se ejecuta O(log m) veces
 		coste temporal total = O(m*m/n + (log m)*(m^5)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^5)*log(m) )/(m*m) ) = infinity )
@@ -36,19 +36,49 @@
 	EK 2:
 		transformación O(m*m/n)
 		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = M
-		numeo de vertices: O(4+2m) = O(m) = N
+		numero de vertices: O(4+2m) = O(m) = N
 		maxflow: O(N*M*M) = O(m^5)
 		maxflow se ejecuta O(log m) veces
 		coste temporal total = O(m*m/n + (log m)*(m^5)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^5)*log(m) )/(m*m) ) = infinity )
 		= O((log m)*(m^5))
+	D 1:
+		transformación O(m*m/n)
+		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = M
+		numero de vertices: O(4+2m) = O(m) = N
+		maxflow: 
+		levels -> bfs -> O(m)
+		blocking flow in levelled graph -> dfs -> O(mn)
+		-> maxflow: O(mn^2)
+		maxflow: O(MN^2) = O(m^2 * m^2) = O(m^4)
+		maxflow se ejecuta O(log m) veces
+		coste temporal total: O(m*m/n + (log m)*(m^4)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^4)*log(m) )/(m*m) ) = infinity )
+		= O((log m)*(m^4))
+
+	D 2:
+		transformación O(m*m/n)
+		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = M
+		numero de vertices: O(4+2m) = O(m) = N
+		maxflow: 
+		levels -> bfs -> O(m)
+		blocking flow in levelled graph -> dfs -> O(mn)
+		-> maxflow: O(mn^2)
+		maxflow: O(MN^2) = O(m^2 * m^2) = O(m^4)
+		maxflow se ejecuta O(log m) veces
+		coste temporal total: O(m*m/n + (log m)*(m^4)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^4)*log(m) )/(m*m) ) = infinity )
+		= O((log m)*(m^4))
+
+
 3- Diferencia v1 con v2
 	Sencillamente subiremos la capacidad de la arista que conecta la salida y la llegada de un mismo vuelo, permitiendo a pilotos 'pasar' por esa arista sin ser piloto.
 4- Tabla de resultados experimentales.
  	???? especificamente, para cada 10 inputs y versión (6) tiempo de compu medio.
 
+ 	[ver average_processed.txt]
+
 5- Referencias bibliograficas
 	[Kleinberg and Tardos, 2005] Kleinberg, J. and Tardos, E. (2009), Algorithm Design. [online] Available at: http://www.icsd.aegean.gr/kaporisa/index_files/Algorithm_Design.pdf [Accessed 27/12/17].
-	//add yours Jordi!
+	
+	Borodin, A. (2009). Dinic's max flow algorithm. Available at http://www.cs.toronto.edu/~bor/375s06/dinic-sketch.pdf [Accessed 29/12/17].
 
 **
  	also folder with code and makefile & compilation instructions
