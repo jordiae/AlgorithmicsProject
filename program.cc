@@ -76,7 +76,7 @@ int main () {
         FluxGraph[i*2+5].push_back(make_pair(tp, 2*m)); //arrival to tp
         FluxGraph[i*2+4].push_back(make_pair(T,1));
         FluxGraph[S].push_back(make_pair(i*2+5,1));
-        if(VERSION == 2) FluxGraph[i*2+4].push_back(make_pair(i*2+5,m)); // departure to arrival
+        if(VERSION == 2) FluxGraph[i*2+4].push_back(make_pair(i*2+5,2*m)); // departure to arrival
 
         // link previous flights to flight i
         for(int j = 0; j < flightArrivals[flights[i].origin].size(); j++) {
@@ -130,13 +130,12 @@ int main () {
     FluxGraph[tp][0].second = top;
     vector<vector<int> > sol = maxflow(FluxGraph, S, T);
     cout << sol[S][0] << endl; // -sol[sp][0] ?
-    /* FOR PRINTING PILOTS!
     sol[sp][0]=0; // eliminate the 'useless' flux
     for(int i=0; i<sol[sp].size(); i++) {
         if(sol[sp][i] != 0) {
             sol[sp][i] -= 1;
-            //printPilot (FluxGraph, sol, FluxGraph[sp][i].first);
+            printPilot (FluxGraph, sol, FluxGraph[sp][i].first);
             i--;
         }
-    }*/
+    }
 }

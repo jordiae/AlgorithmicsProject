@@ -1,86 +1,89 @@
 1- Breve descripción implementado
-	Hemos considerado el enunciado como un problema de asignación en el cual tendremos flujos representando a pilotos. Para trazar la red, basándonos en el material recomendado de [Kleinberg and Tardos, 2009], tendremos una red de flujos con demandas y lower bounds. En concreto, tendremos un 'source' S que proporciona un número k de pilotos y un 'sink' T que los absorbe, conectados por una arista de peso k. Además, para cada vuelo, tendremos dos vertices (salida y llegada), conectados respectivamente a S y a T, a los cuales hemos asignado capacidad infinita (en realidad es sencillamente el numero de vuelos pues k <= numero de vuelos, y para simplificar podría ser sencillamente 1 pero eso solo se aplica en la primera versión del problema). Por último, conectaremos estos dos vertices por una arista con lower bound de 1 y capacidad máxima de 1 (en versión 1).
-	De esta manera, si el grafo se puede satisfacer (is feasible), entonces significa que: usamos k pilotos y todas las aristas con lowerbound (los vuelos en sí) están cubiertas. Esto es equivalente a decir que se pueden cubrir todos los vuelos con K pilotos. Ahora, sencillamente tendremos que probar con una K más baja.
-	En concreto, nosotros bajamos la k según el numero de pilotos no usados (por la arista de S a T), y usamos una búsqueda dicotómica para determinar la K mínima.
-	Como último punto, a la hora de implementar dicho grafo, lo transformamos en un grafo de capacidades normales, con dos vertices extra para suplir las ofertas de S y las que se forman en eliminar los lowerbounds y tragarse las demandas de T y las formadas en eliminar los lowerbounds.
+	Hemos considerado el enunciado como un problema de asignación en el cual tendremos flujos representando a pilotos. Para trazar la red, basándonos en el material recomendado de [Kleinberg and Tardos, 2009], tendremos una red de flujos con demandas y lower bounds. En concreto, tendremos un 'source' S que proporciona un número k de pilotos y un 'sink' T que los absorbe, conectados por un arco de peso k (el flujo que pase por dicho arco no habrá sido usado para solucionar el problema). Además, para cada vuelo, tendremos dos vertices (salida y llegada), conectados por arcos respectivamente a S y a T, con capacidad infinita (en realidad es sencillamente el doble del numero de vuelos pues k <= numero de vuelos y hay maxflow de m+k). Podría ser capacidad de 1 pero eso solo se aplica en la primera versión del problema. Por último, conectaremos estos dos vertices por un arco con capacidad mínima de 1 y máxima de 1.
+	Además, si este vuelo es accesible desde otro anterior, conectaremos la llegada del previo a nuestra salida con otro arco de capacidad infinita (de nuevo, 2*m).
+	De esta manera, si el grafo se puede satisfacer (is feasible), entonces significa que: usamos k pilotos y todas los arcos con lowerbound (los vuelos en sí) están cubiertas. Esto es equivalente a decir que se pueden cubrir todos los vuelos con K pilotos. Ahora, sencillamente tendremos que probar con una K más baja.
+	En concreto, nosotros bajamos la k según el numero de pilotos no usados (por el arco de S a T), y usamos una búsqueda dicotómica para determinar la K mínima.
+	Como último punto, a la hora de implementar dicho grafo, lo transformamos en un grafo de capacidades normales, con dos vertices extra para suplir las ofertas de S y las que se forman en eliminar los lowerbounds, y tragarse las demandas de T y las formadas en eliminar los lowerbounds.
 	Por último, hemos implementado tres algoritmos: Ford-Fulkerson, Edmonds-Karp y Dinic, para obtener las redes de flujos. 
-2- Coste temporal (minimo EK v1)
-	n: numero de ciudades; m: numero de vuelos;
-	(Victor) La transformación es 'aprox' O (m*m/n). Es aprox porque m/n es la carga esperada por casilla del vector Arrivals. (Puedo modificarlo a O(m log m) si me da tiempo). Luego, tened en cuenta de que se llamará en el peor caso log m veces la función maxflow!
-	FF 1:
+2- Coste temporal
+	Usaremos:
+		n: numero de ciudades; m: numero de vuelos;
+	La transformación al grafo de capacidades desde el input es aproximadamente O (m*m/n). m/n es la carga esperada por casilla del vector Arrivals. 
+	Para calcular el resultado final, llamaremos a la función de maxflow (depende de qué algoritmo, tendrá un coste diferente) un máximo de log m veces, ya que realizamos una búsqueda dicotómica para encontrar la k. Realmente el coste es muchísimo menor que log m en la mayoría de casos, pues el problema no se reduce a la mitad sinó a la mitad menos los pilotos no usados (arco s-t) en caso de que sea 'feasible'. Experimentalmente, vemos que en caso de m con valores de 250, esperamos que el problema se reduzca a menos de 70 en la primera llamada a la función.
+	Por último, la transformación a resultado (escribir los pilotos) es O(k*(|V|+|E|)) (para cada piloto, recorrer el grafo de S a T en un DFS (|V| es O(m) y |E| es O(m^2))). Como k es también O(m) estamos hablando de un coste O(m^3).
+	A continuación, viene el coste detallado para cada algoritmo y versión, teniendo en cuenta lo mencionado préviamente.
+	Ford-Fulkerson 1:
 		transformación O(m*m/n)
-		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = M
-		numero de vertices: O(4+2m) = O(m) = N
-		Capacidad: 2*m = O(m) = C 
-		maxflow: O(C*M) = O(m^3)
+		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = |E|
+		numero de vertices: O(4+2m) = O(m) = |V|
+		Capacidad máxima: 2*m = O(m) = C 
+		maxflow: O(C*|E|) = O(m^3)
 		maxflow se ejecuta O(log m) veces
-		coste temporal total = O(m*m/n + (log m)*(m^3)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^3)*log(m) )/(m*m) ) = infinity )
-		= O((log m)*(m^3))
-	FF 2:
+		Coste de computar solución = O(m^3)
+		coste temporal total = O(m*m/n + (log m)*(m^3) + m^3) = O((log m)*(m^3))
+	Ford-Fulkerson 2:
 		transformación O(m*m/n)
-		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = M
-		numero de vertices: O(4+2m) = O(m) = N
+		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = |E|
+		numero de vertices: O(4+2m) = O(m) = |V|
 		Capacidad: 2*m = O(m) = C 
-		maxflow: O(C*M) = O(m^3)
+		maxflow: O(C*|E|) = O(m^3)
 		maxflow se ejecuta O(log m) veces
-		coste temporal total = O(m*m/n + (log m)*(m^3)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^3)*log(m) )/(m*m) ) = infinity )
-		= O((log m)*(m^3))
-	EK 1:
+		Coste de computar solución = O(m^3)
+		coste temporal total = O(m*m/n + (log m)*(m^3) + m^3) = O((log m)*(m^3))
+	Edmonds-Karp 1:
 		transformación O(m*m/n)
-		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = M
-		numero de vertices: O(4+2m) = O(m) = N
+		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = |E|
+		numero de vertices: O(4+2m) = O(m) = |V|
+		maxflow: O(|V|*|E|^2) = O(m^5)			*********************** NEED TO CHECK!
+		maxflow se ejecuta O(log m) veces
+		Coste de computar solución = O(m^3)
+		coste temporal total = O(m*m/n + (log m)*(m^5) + m^3) = O((log m)*(m^5))
+	Edmonds-Karp 2:
+		transformación O(m*m/n)
+		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = |E|
+		numero de vertices: O(4+2m) = O(m) = |V|
 		maxflow: O(N*M*M) = O(m^5)
 		maxflow se ejecuta O(log m) veces
-		coste temporal total = O(m*m/n + (log m)*(m^5)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^5)*log(m) )/(m*m) ) = infinity )
-		= O((log m)*(m^5))
-	EK 2:
+		Coste de computar solución = O(m^3)
+		coste temporal total = O(m*m/n + (log m)*(m^5) + m^3) = O((log m)*(m^5))
+	Dinic 1:
 		transformación O(m*m/n)
-		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = M
-		numero de vertices: O(4+2m) = O(m) = N
-		maxflow: O(N*M*M) = O(m^5)
-		maxflow se ejecuta O(log m) veces
-		coste temporal total = O(m*m/n + (log m)*(m^5)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^5)*log(m) )/(m*m) ) = infinity )
-		= O((log m)*(m^5))
-	D 1:
-		transformación O(m*m/n)
-		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = M
-		numero de vertices: O(4+2m) = O(m) = N
+		numero de arcos en el grafo: O(3+4m+m*m) = O(m*m) = |E|
+		numero de vertices: O(4+2m) = O(m) = |V|
 		maxflow: 
 		levels -> bfs -> O(m)
 		blocking flow in levelled graph -> dfs -> O(mn)
 		-> maxflow: O(mn^2)
 		maxflow: O(MN^2) = O(m^2 * m^2) = O(m^4)
 		maxflow se ejecuta O(log m) veces
-		coste temporal total: O(m*m/n + (log m)*(m^4)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^4)*log(m) )/(m*m) ) = infinity )
-		= O((log m)*(m^4))
+		Coste de computar solución = O(m^3)
+		coste temporal total: O(m*m/n + (log m)*(m^4) + m^3) = O((log m)*(m^4))
 
-	D 2:
+	Dinic 2:
 		transformación O(m*m/n)
-		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = M
-		numero de vertices: O(4+2m) = O(m) = N
+		numero de arcos en el grafo: O(3+5m+m*m) = O(m*m) = |E|
+		numero de vertices: O(4+2m) = O(m) = |V|
 		maxflow: 
 		levels -> bfs -> O(m)
 		blocking flow in levelled graph -> dfs -> O(mn)
 		-> maxflow: O(mn^2)
 		maxflow: O(MN^2) = O(m^2 * m^2) = O(m^4)
 		maxflow se ejecuta O(log m) veces
-		coste temporal total: O(m*m/n + (log m)*(m^4)) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^4)*log(m) )/(m*m) ) = infinity )
+		coste temporal total: O(m*m/n + (log m)*(m^4) + m^3) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^4)*log(m) )/(m*m) ) = infinity )
 		= O((log m)*(m^4))
 
 
 3- Diferencia v1 con v2
-	Sencillamente subiremos la capacidad de la arista que conecta la salida y la llegada de un mismo vuelo, permitiendo a pilotos 'pasar' por esa arista sin ser piloto.
+	Sencillamente subiremos la capacidad del arco que conecta la salida y la llegada de un mismo vuelo, permitiendo a pilotos 'pasar' por este arco sin ser piloto, o mejor dicho, siendo pasajeros. Además, si no hubieramos puesto capacidad 'infinita' entre vuelos, S y T, ahora tendríamos que hacerlo ahora para dejar que hubiera flujo de pilotos entre un vuelo y otro no limitado a uno.
+	Un ejemplo de la razón por la cuál tenemos que poner dicha capacidad es el caso siguiente: cien vuelos salen a primera hora desde cien ciudades distintas para ir a la misma. De ahí, tras un buen rato, sale un vuelo a otra ciudad. Por último, de esta última ciudad, salen cien vuelos a las cien ciudades del principio.
+	Si no pusieramos capacidad infinita en los arcos mencionados, solo podrían viajar dos pilotos en el vuelo intermedio. 
 4- Tabla de resultados experimentales.
  	???? especificamente, para cada 10 inputs y versión (6) tiempo de compu medio.
 
  	[ver average_processed.txt]
+ 	(COLOCA ESTO AQUÍ JORDI!)
 
 5- Referencias bibliograficas
 	[Kleinberg and Tardos, 2005] Kleinberg, J. and Tardos, E. (2009), Algorithm Design. [online] Available at: http://www.icsd.aegean.gr/kaporisa/index_files/Algorithm_Design.pdf [Accessed 27/12/17].
-	
+	[Diapositivas de clase, 2017]. Available at: http://www.cs.upc.edu/~mjserna/docencia/grauA/T17/MaxFlow-fib.pdf
 	Borodin, A. (2009). Dinic's max flow algorithm. Available at http://www.cs.toronto.edu/~bor/375s06/dinic-sketch.pdf [Accessed 29/12/17].
-
-**
- 	also folder with code and makefile & compilation instructions
- 	Resultado1.txt
- 	Resultado2.txt
