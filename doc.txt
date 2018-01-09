@@ -54,7 +54,7 @@
 		levels -> bfs -> O(m)
 		blocking flow in levelled graph -> dfs -> O(mn)
 		-> maxflow: O(mn^2)
-		maxflow: O(MN^2) = O(m^2 * m^2) = O(m^4)
+		maxflow: O(|E|*|V|^2) = O(m^2 * m^2) = O(m^4)
 		maxflow se ejecuta O(log m) veces
 		Coste de computar solución = O(m^3)
 		coste temporal total: O(m*m/n + (log m)*(m^4) + m^3) = O((log m)*(m^4))
@@ -69,8 +69,7 @@
 		-> maxflow: O(mn^2)
 		maxflow: O(MN^2) = O(m^2 * m^2) = O(m^4)
 		maxflow se ejecuta O(log m) veces
-		coste temporal total: O(m*m/n + (log m)*(m^4) + m^3) = (dado que (m*m/n)<(m*m) y lim m->infinity ( ( (m^4)*log(m) )/(m*m) ) = infinity )
-		= O((log m)*(m^4))
+		coste temporal total: O(m*m/n + (log m)*(m^4) + m^3) = O((log m)*(m^4))
 
 
 3- Diferencia v1 con v2
